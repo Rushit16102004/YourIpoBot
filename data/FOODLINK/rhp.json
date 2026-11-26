@@ -1,0 +1,53 @@
+{
+  "company_name": "FOODLINK F&B HOLDINGS (INDIA) LIMITED",
+  "symbol": null,
+  "face_value_inr": 2.0,
+  "price_band_low_inr": null,
+  "price_band_high_inr": null,
+  "fresh_issue_cr": 192.0,
+  "ofs_cr": null,
+  "total_issue_cr": null,
+  "lot_size": null,
+  "upper_band_eps_inr": 5.48,
+  "financial_years": [
+    {
+      "fiscal_year": "FY26",
+      "revenue_cr": 567.5,
+      "pat_cr": 29.11,
+      "operating_cash_flow_cr": 29.91,
+      "eps_basic": 5.58,
+      "eps_diluted": 5.48
+    },
+    {
+      "fiscal_year": "FY25",
+      "revenue_cr": 450.86,
+      "pat_cr": 14.26,
+      "operating_cash_flow_cr": 43.99,
+      "eps_basic": 2.88,
+      "eps_diluted": 2.83
+    },
+    {
+      "fiscal_year": "FY24",
+      "revenue_cr": 377.19,
+      "pat_cr": -15.35,
+      "operating_cash_flow_cr": 23.35,
+      "eps_basic": -3.1,
+      "eps_diluted": -3.1
+    }
+  ],
+  "peer_companies": [],
+  "objects_of_issue": [
+    "Funding of capital expenditure towards setting up one new centralized kitchen (\u201cProposed Centralized Kitchen\u201d) by our Company",
+    "Funding of capital expenditure towards setting up two new banquets (\u201cProposed Banquets\u201d) by our Company",
+    "Investment in Foodlink Global Restaurants & Catering Services LLC (\u201cFGRCS\u201d), our Material Subsidiary, for funding of capital expenditure towards setting up four new casual dining restaurants (\u201cProposed Casual Dining Restaurants\u201d)",
+    "Repayment or prepayment, in full or in part, of all or a portion of certain outstanding borrowings availed by our Company and FGRCS",
+    "General corporate purposes"
+  ],
+  "key_risks": [
+    "If we are unable to identify and obtain suitable locations for opening the Proposed Centralized Kitchen, the Proposed Banquets by our Company and the Proposed Casual Dining Restaurants by our Material Subsidiary, Foodlink Global Restaurants & Catering Services LLC, it may result in lower footfalls and table turns rates which would adversely affect our anticipated growth in our businesses.",
+    "We have not yet placed orders in relation to the capital expenditure for setting up the Proposed Centralized Kitchen, the Proposed Banquets by our Company and the Proposed Casual Dining Restaurants by our Material Subsidiary, Foodlink Global Restaurants & Catering Services LLC.",
+    "Our Company and certain of our Subsidiaries have incurred losses in the past, and we may not be able to achieve or maintain profitability in the future.",
+    "We have in the past shut down certain of our Casual Dining Restaurants & Cloud Kitchens.",
+    "We derive a significant portion of our revenue from our Events Catering business."
+  ]
+}

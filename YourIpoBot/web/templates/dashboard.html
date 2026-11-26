@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YourIpoBot — Intelligent IPO Grey Market Predictor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top Navigation Bar -->
+        <header class="app-header">
+            <div class="brand">
+                <div class="brand-logo">📈</div>
+                <div class="brand-text">
+                    <h1>YourIpoBot</h1>
+                    <span class="brand-subtitle">AI & Quantitative IPO Predictor • Oracle Cloud</span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <div class="status-pill online">
+                    <span class="dot"></span>
+                    <span>Database: {{ total_hist_count }} Verified Benchmarks</span>
+                </div>
+                <button class="btn btn-primary" onclick="triggerPipeline()">
+                    <span class="btn-icon">⚡</span> Run Real-Time Update
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="dashboard-main">
+            <!-- Hero Stats Row -->
+            <section class="stats-row">
+                <div class="stat-card">
+                    <span class="stat-label">Active Tracked IPOs</span>
+                    <span class="stat-value">{{ ipos|length }}</span>
+                    <span class="stat-desc">Mainboard & SME queued</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Prediction Algorithm</span>
+                    <span class="stat-value">5-Tier k-NN</span>
+                    <span class="stat-desc">Sector-Priority (≥80% match)</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Critical Retail Window</span>
+                    <span class="stat-value">04:05 PM</span>
+                    <span class="stat-desc">Before 04:45 PM UPI Cutoff</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Cloud Deployment</span>
+                    <span class="stat-value">OCI Always Free</span>
+                    <span class="stat-desc">Arm Ampere 4 OCPU / 24GB</span>
+                </div>
+            </section>
+
+            <!-- Active IPO Predictions Section -->
+            <section class="ipos-section">
+                <div class="section-header">
+                    <h2>Live IPOs & Quantitative Predictions</h2>
+                    <span class="section-tag">Dynamic Timetable Driven</span>
+                </div>
+
+                <div class="cards-grid">
+                    {% for ipo in ipos %}
+                    <div class="ipo-card">
+                        <div class="card-top">
+                            <div class="company-info">
+                                <span class="board-badge {{ 'badge-sme' if ipo.is_sme else 'badge-mainboard' }}">
+                                    {{ ipo.board }}
+                                </span>
+                                <h3 class="company-name">{{ ipo.canonical_name }}</h3>
+                                <span class="company-symbol">{{ ipo.symbol }}</span>
+                            </div>
+                            <div class="gmp-display">
+                                <span class="gmp-label">Predicted GMP</span>
+                                {% if ipo.predicted_gmp is not none %}
+                                    <span class="gmp-value {{ 'gmp-pos' if ipo.predicted_gmp >= 0 else 'gmp-neg' }}">
+                                        {{ '+' if ipo.predicted_gmp > 0 else '' }}{{ ipo.predicted_gmp }}%
+                                    </span>
+                                {% else %}
+                                    <span class="gmp-value gmp-na">TBD</span>
+                                {% endif %}
+                                <span class="confidence-badge conf-{{ ipo.confidence|lower }}">{{ ipo.confidence }} Confidence</span>
+                            </div>
+                        </div>
+
+                        <div class="card-meta-grid">
+                            <div class="meta-item">
+                                <span class="meta-label">Price Band</span>
+                                <span class="meta-value">₹{{ ipo.issue_price or 'TBD' }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Issue Size</span>
+                                <span class="meta-value">{{ '₹' ~ ipo.issue_size_cr ~ ' Cr' if ipo.issue_size_cr else 'TBD' }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Bidding Dates</span>
+                                <span class="meta-value">{{ ipo.issue_open }} → {{ ipo.issue_close }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">RHP PDF</span>
+                                <span class="doc-badge doc-{{ ipo.rhp_status|lower }}">{{ ipo.rhp_status }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Anchor PDF</span>
+                                <span class="doc-badge doc-{{ ipo.anchor_status|lower }}">{{ ipo.anchor_status }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Peers Used</span>
+                                <span class="meta-value">{{ ipo.peers_count }} Benchmarks</span>
+                            </div>
+                        </div>
+
+                        <!-- Top 5 Matched Peers Drawer -->
+                        <div class="peers-drawer">
+                            <span class="drawer-title">Top 5 Historical Benchmark Peers (Similarity ≥80%):</span>
+                            {% if ipo.top_peers %}
+                            <div class="peers-list">
+                                {% for peer in ipo.top_peers %}
+                                <div class="peer-row">
+                                    <div class="peer-main">
+                                        <span class="peer-name">{{ peer.name }} ({{ peer.year }})</span>
+                                        <span class="peer-sec-tag {{ 'tag-same-sec' if peer.is_same_sector else 'tag-diff-sec' }}">
+                                            {{ 'Same Sector' if peer.is_same_sector else 'Cross Sector' }}
+                                        </span>
+                                    </div>
+                                    <div class="peer-stats">
+                                        <span class="peer-sim">Match: <strong>{{ peer.similarity }}%</strong></span>
+                                        <span class="peer-gmp">Hist GMP: <strong class="{{ 'text-green' if peer.historical_gmp >= 0 else 'text-red' }}">{{ peer.historical_gmp }}%</strong></span>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            <p class="empty-peers">No historical peers reached the ≥80% similarity threshold yet.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  youripobot:
+    build:
+      context: ..
+      dockerfile: YourIpoBot/Dockerfile
+    container_name: youripobot
+    restart: always
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../YourIpoBot/companies:/app/YourIpoBot/companies
+      - ../YourIpoBot/data:/app/YourIpoBot/data
+    environment:
+      - PYTHONUNBUFFERED=1

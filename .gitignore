@@ -1,0 +1,16 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.tmp
+
+# Virtual Environment
+venv/
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Exclude raw scraped data cache in root if present
+data/raw/

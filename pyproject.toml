@@ -1,0 +1,9 @@
+[project]
+name = "ipo-daily-agent"
+version = "0.1.0"
+description = "Modular free-tier Indian IPO daily analysis agent"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]

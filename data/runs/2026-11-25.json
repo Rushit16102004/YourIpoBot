@@ -1,0 +1,43 @@
+{
+  "run_date": "2026-11-25",
+  "ran_at": "2026-11-25T13:32:44.710252+00:00",
+  "ipos_processed": [
+    {
+      "symbol": "FOODLINK",
+      "company_name": "Foodlink F&B Holdings (India) Limited",
+      "series": "Equity",
+      "status": "Forthcoming",
+      "issue_start_date": "26-Nov-2026",
+      "issue_end_date": "30-Nov-2026",
+      "rhp_path": "C:\\Users\\ASUS\\OneDrive\\Desktop\\YoutIPOBot\\data\\FOODLINK\\rhp.pdf",
+      "anchor_path": null,
+      "anchor_status": "PENDING",
+      "scoring": {
+        "symbol": "FOODLINK",
+        "company_name": "Foodlink F&B Holdings (India) Limited",
+        "score": 46.0,
+        "decision": "WATCH / CONFIRM DAY-3 QIB",
+        "anchor_status": "PENDING",
+        "hard_skip_reasons": [],
+        "notes": [
+          "No listed peer P/E found; IPO upper P/E is 34.85x.",
+          "Anchor allocation status: PENDING."
+        ],
+        "metrics": {
+          "fresh_issue_pct": 100.0,
+          "revenue_cagr_pct": 22.66,
+          "pat_cagr_pct": null,
+          "latest_ocf_cr": 29.91,
+          "ocf_positive_all_years": true,
+          "ipo_upper_pe": 34.85,
+          "peer_median_pe": null,
+          "peer_pe_source": null,
+          "pe_vs_peer_ratio": null,
+          "tier1_anchor_share_pct": null,
+          "qib_x": null
+        }
+      },
+      "error": null
+    }
+  ]
+}
