@@ -44,5 +44,5 @@ WEIGHT_PROFITABILITY: float = 0.25      # Margins & Net Profit
 WEIGHT_DEBT_CASH: float = 0.15          # Debt-to-Equity, Cash, OFS vs Fresh
 WEIGHT_OTHER_INFO: float = 0.10         # Sector, Governance, Promoter Stake
 
-SIMILARITY_THRESHOLD: float = 80.0      # Minimum % match required
+SIMILARITY_THRESHOLD: float = 85.0      # Minimum % match required (raised to 85% per user specification)
 TOP_PEERS_COUNT: int = 5                # Number of historical peers to average

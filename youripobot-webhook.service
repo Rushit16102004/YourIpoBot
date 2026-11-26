@@ -1,0 +1,16 @@
+[Unit]
+Description=YourIpoBot Auto-Deploy GitHub Webhook Listener
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/var/www/YourIpoBot
+ExecStart=/var/www/YourIpoBot/venv/bin/python3 /var/www/YourIpoBot/webhook_listener.py
+Restart=always
+RestartSec=5
+Environment=PYTHONUNBUFFERED=1
+Environment=DEPLOY_SECRET=youripobot_secret_key_1610
+
+[Install]
+WantedBy=multi-user.target

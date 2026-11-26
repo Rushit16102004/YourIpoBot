@@ -33,6 +33,7 @@ class PeerMatchResult:
     industry: Optional[str]
     similarity_score: float
     historical_gmp_pct: float
+    is_same_industry: bool
     is_same_sector: bool
     issue_size_cr: Optional[float]
     net_profit_margin_pct: Optional[float]
@@ -45,6 +46,7 @@ class GMPPredictionResponse:
     predicted_gmp_pct: Optional[float]
     confidence_level: str               # HIGH, MODERATE, LOW, INSUFFICIENT_DATA
     peers_used_count: int
+    industry_peers_count: int
     sector_peers_count: int
     other_peers_count: int
     top_peers: list[PeerMatchResult]
@@ -144,39 +146,42 @@ class GMPSimilarityEngine:
 
     def predict_gmp(self, target_ipo: dict[str, Any], min_threshold: float = config.SIMILARITY_THRESHOLD) -> GMPPredictionResponse:
         """
-        Execute Sector-Priority Top-5 selection rule:
-        1. Select peers matching >= min_threshold (default 80%) similarity in the same sector.
-        2. Fill remaining spots up to 5 from the highest non-sector matches >= min_threshold.
-        3. If no peers meet 80%, adaptively fall back to the highest available cohort.
-        4. Compute weighted average GMP.
+        Execute 3-Tier Hierarchy Selection Rule:
+        1. Select peers matching >= min_threshold (default 85%) in the SAME INDUSTRY.
+        2. If fewer than 5, select peers matching >= min_threshold in the SAME SECTOR.
+        3. If still fewer than 5, fill remaining spots up to 5 from the HIGHEST remaining matches >= min_threshold.
+        4. If fewer than 5 meet 85%, adaptively average whatever meets the threshold (e.g. 4, 3, etc.).
+        5. Compute similarity-weighted average GMP.
         """
         cname = target_ipo.get("canonical_name", "Unknown IPO")
         target_id = target_ipo.get("ipo_id", "unlisted_ipo")
-        target_sec = str(target_ipo.get("sector") or "").lower()
+        target_ind = str(target_ipo.get("industry") or "").lower().strip()
+        target_sec = str(target_ipo.get("sector") or "").lower().strip()
 
-        # Phase 1: Try strict user threshold (>= 80%)
-        candidate_matches: list[tuple[float, pd.Series, bool]] = []
+        candidate_matches: list[tuple[float, pd.Series, bool, bool]] = []
         for _, row in self.history_df.iterrows():
             sim = self.compute_similarity(target_ipo, row)
-            r_sec = str(row.get("sector") or "").lower()
-            is_same = bool((target_sec != "" and target_sec in r_sec) or (r_sec != "" and r_sec in target_sec))
-            candidate_matches.append((sim, row, is_same))
+            r_ind = str(row.get("industry") or "").lower().strip()
+            r_sec = str(row.get("sector") or "").lower().strip()
+
+            is_same_ind = bool(target_ind and r_ind and (target_ind in r_ind or r_ind in target_ind))
+            is_same_sec = bool(target_sec and r_sec and (target_sec in r_sec or r_sec in target_sec))
+            candidate_matches.append((sim, row, is_same_ind, is_same_sec))
 
         candidate_matches.sort(key=lambda x: x[0], reverse=True)
 
-        # Check if any matches meet the threshold
+        # Filter strictly >= min_threshold (85%)
         qualifying = [item for item in candidate_matches if item[0] >= min_threshold]
 
-        # If zero meet the threshold, fallback gracefully to top 5 available (flagging confidence)
-        effective_threshold = min_threshold
+        # Graceful fallback if zero peers qualify at 85%
         if not qualifying:
             qualifying = candidate_matches[:config.TOP_PEERS_COUNT]
-            effective_threshold = qualifying[-1][0] if qualifying else 0.0
 
+        pool_same_industry: list[PeerMatchResult] = []
         pool_same_sector: list[PeerMatchResult] = []
-        pool_other_sector: list[PeerMatchResult] = []
+        pool_other: list[PeerMatchResult] = []
 
-        for sim, row, is_same in qualifying:
+        for sim, row, is_same_ind, is_same_sec in qualifying:
             peer = PeerMatchResult(
                 ipo_id=str(row.get("ipo_id")),
                 canonical_name=str(row.get("canonical_name")),
@@ -185,21 +190,29 @@ class GMPSimilarityEngine:
                 industry=str(row.get("industry")) if pd.notna(row.get("industry")) else None,
                 similarity_score=sim,
                 historical_gmp_pct=float(row.get("GMP_Day3_Clean")),
-                is_same_sector=is_same,
+                is_same_industry=is_same_ind,
+                is_same_sector=is_same_sec,
                 issue_size_cr=float(row.get("issue_size_cr")) if pd.notna(row.get("issue_size_cr")) else None,
                 net_profit_margin_pct=float(row.get("Net_Profit_Margin_Pct")) if pd.notna(row.get("Net_Profit_Margin_Pct")) else None,
             )
-            if is_same:
+            if is_same_ind:
+                pool_same_industry.append(peer)
+            elif is_same_sec:
                 pool_same_sector.append(peer)
             else:
-                pool_other_sector.append(peer)
+                pool_other.append(peer)
 
-        # Sector Priority Selection
+        # 3-Tier Priority Selection: Industry -> Sector -> Cross-Sector Top Match
         selected_peers: list[PeerMatchResult] = []
-        selected_peers.extend(pool_same_sector[:config.TOP_PEERS_COUNT])
+        selected_peers.extend(pool_same_industry[:config.TOP_PEERS_COUNT])
+
         needed = config.TOP_PEERS_COUNT - len(selected_peers)
         if needed > 0:
-            selected_peers.extend(pool_other_sector[:needed])
+            selected_peers.extend(pool_same_sector[:needed])
+
+        needed = config.TOP_PEERS_COUNT - len(selected_peers)
+        if needed > 0:
+            selected_peers.extend(pool_other[:needed])
 
         if not selected_peers:
             return GMPPredictionResponse(
@@ -208,6 +221,7 @@ class GMPSimilarityEngine:
                 predicted_gmp_pct=None,
                 confidence_level="INSUFFICIENT_DATA",
                 peers_used_count=0,
+                industry_peers_count=0,
                 sector_peers_count=0,
                 other_peers_count=0,
                 top_peers=[],
@@ -218,17 +232,19 @@ class GMPSimilarityEngine:
         gmps = [p.historical_gmp_pct for p in selected_peers]
         pred_gmp = round(float(np.average(gmps, weights=weights)), 2)
 
-        sector_count = sum(1 for p in selected_peers if p.is_same_sector)
-        other_count = len(selected_peers) - sector_count
+        industry_count = sum(1 for p in selected_peers if p.is_same_industry)
+        sector_count = sum(1 for p in selected_peers if p.is_same_sector and not p.is_same_industry)
+        other_count = len(selected_peers) - industry_count - sector_count
 
-        if min(weights) >= 80.0:
-            confidence = "HIGH" if sector_count >= 2 else "MODERATE"
+        if min(weights) >= 85.0:
+            confidence = "HIGH" if (industry_count >= 1 or sector_count >= 2) else "MODERATE"
         else:
-            confidence = "MODERATE" if min(weights) >= 70.0 else "LOW"
+            confidence = "MODERATE" if min(weights) >= 75.0 else "LOW"
 
         msg = (
             f"Predicted GMP: {pred_gmp}% based on {len(selected_peers)} peers "
-            f"({sector_count} same-sector, {other_count} cross-sector) with similarity {selected_peers[-1].similarity_score}% - {selected_peers[0].similarity_score}%."
+            f"({industry_count} same-industry, {sector_count} same-sector, {other_count} top-match) "
+            f"with similarity {selected_peers[-1].similarity_score}% - {selected_peers[0].similarity_score}%."
         )
 
         return GMPPredictionResponse(
@@ -237,6 +253,7 @@ class GMPSimilarityEngine:
             predicted_gmp_pct=pred_gmp,
             confidence_level=confidence,
             peers_used_count=len(selected_peers),
+            industry_peers_count=industry_count,
             sector_peers_count=sector_count,
             other_peers_count=other_count,
             top_peers=selected_peers,
