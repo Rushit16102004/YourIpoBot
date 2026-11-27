@@ -92,8 +92,12 @@ def api_get_ipos():
         rows = conn.execute("SELECT ipo_id, canonical_name, company_dir FROM active_ipo_queue").fetchall()
 
     out = []
-    for ipo_id, cname, comp_dir in rows:
-        p_file = Path(comp_dir) / "prediction.json"
+    for ipo_id, cname, comp_dir_str in rows:
+        comp_folder_name = Path(comp_dir_str).name
+        comp_dir = config.COMPANIES_DIR / comp_folder_name
+        if not comp_dir.exists():
+            comp_dir = Path(comp_dir_str)
+        p_file = comp_dir / "prediction.json"
         if p_file.exists():
             with open(p_file, "r", encoding="utf-8") as f:
                 out.append(json.load(f))
