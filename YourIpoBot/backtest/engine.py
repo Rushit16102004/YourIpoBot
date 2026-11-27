@@ -11,35 +11,27 @@ from pathlib import Path
 from dataclasses import dataclass
 from typing import List, Dict, Any, Tuple, Optional
 
-# Active feature columns tested for matching
+# Active feature columns tested for matching (pruned noisy/misleading columns)
 CANDIDATE_FEATURES = [
     # Profitability (35%)
     "Net_Profit_Margin_Pct",
-    "Operating_Margin_Pct",
     "Revenue_Growth_YoY_Pct",
     "Is_Profitable",
     "EPS",
     "ROCE_est",
     
-    # Issue Size & Liquidity (25%)
-    "issue_size_cr",
+    # Valuation & Liquidity (25%)
     "issue_base_price",
-    "Fresh_Issue_Size_Norm",
-    "OFS_Size_Norm",
-    "Post_Issue_Shares_Clean",
+    "issue_size_cr",
     
-    # Debt, Cash Flow & Balance Sheet (20%)
+    # Debt & Solvency (20%)
     "Debt_to_Equity_Ratio",
     "Total_Borrowings_Norm",
-    "Total_Book_Value",
-    "BVPS",
-    "Cash_Norm",
-    "Total_Assets_Norm",
     
     # Governance & Structure (20%)
-    "is_sme",
     "sector",
     "industry",
+    "is_sme",
     "Promoter_Holding_Post_Clean",
 ]
 

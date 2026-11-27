@@ -92,8 +92,8 @@ class GMPSimilarityEngine:
     def compute_similarity(self, target: dict[str, Any], candidate: pd.Series) -> float:
         """Calculate weighted composite similarity score across fundamentals (excluding live subscription)."""
         size_scores = []
-        # Pruned misleading OFS_Size_Norm as proven by quantitative ablation
-        for col in ["issue_size_cr", "issue_base_price", "Fresh_Issue_Size_Norm"]:
+        # Pruned noisy columns (OFS_Size_Norm, Fresh_Issue_Size_Norm) - keeping core pricing & size signal
+        for col in ["issue_size_cr", "issue_base_price"]:
             v1 = self._normalize_currency_units(target.get(col)) if "size" in col.lower() else target.get(col)
             v2 = self._normalize_currency_units(candidate.get(col)) if "size" in col.lower() else candidate.get(col)
             s = self._feature_similarity(v1, v2, tolerance_ratio=1.5)
@@ -103,10 +103,9 @@ class GMPSimilarityEngine:
         prof_scores = []
         # 100% Percentage-based Profit Comparison:
         # Net_Profit_Margin_Pct: (PAT / Revenue) * 100
-        # Operating_Margin_Pct: (EBITDA / Revenue) * 100
         # Revenue_Growth_YoY_Pct: Year-over-Year revenue expansion %
         # Is_Profitable: Binary 1.0 vs 0.0 match
-        for col in ["Net_Profit_Margin_Pct", "Operating_Margin_Pct", "Revenue_Growth_YoY_Pct"]:
+        for col in ["Net_Profit_Margin_Pct", "Revenue_Growth_YoY_Pct"]:
             val_t = target.get(col)
             val_c = candidate.get(col)
             # If Net_Profit_Margin_Pct is missing in target, compute directly from PAT and Revenue if present
@@ -127,9 +126,10 @@ class GMPSimilarityEngine:
             prof_scores.append(1.0 if int(float(t_prof)) == int(float(c_prof)) else 0.0)
 
         debt_scores = []
-        for col in ["Debt_to_Equity_Ratio", "Total_Borrowings_Norm", "Total_Book_Value", "BVPS"]:
-            v1 = self._normalize_currency_units(target.get(col)) if any(k in col for k in ["Borrowings", "Book_Value"]) else target.get(col)
-            v2 = self._normalize_currency_units(candidate.get(col)) if any(k in col for k in ["Borrowings", "Book_Value"]) else candidate.get(col)
+        # Pruned noisy Total_Book_Value and BVPS - keeping core solvency & leverage
+        for col in ["Debt_to_Equity_Ratio", "Total_Borrowings_Norm"]:
+            v1 = self._normalize_currency_units(target.get(col)) if "Borrowings" in col else target.get(col)
+            v2 = self._normalize_currency_units(candidate.get(col)) if "Borrowings" in col else candidate.get(col)
             s = self._feature_similarity(v1, v2, tolerance_ratio=1.8)
             if s is not None:
                 debt_scores.append(s)
