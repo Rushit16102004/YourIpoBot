@@ -2,66 +2,66 @@
   "ipo_id": "ajpack_2026",
   "canonical_name": "AJ Packaging Limited",
   "stage": "FINAL_DAY_END",
-  "predicted_gmp_pct": 4.76,
+  "predicted_gmp_pct": 61.31,
   "confidence_level": "MODERATE",
-  "decision_badge": "NEUTRAL_PENDING",
-  "decision_reason": "Awaiting final bidding demand confirmation.",
+  "decision_badge": "STRONG_APPLY",
+  "decision_reason": "High predicted GMP (+61.31%) based on 5 fundamental peers.",
   "peers_used_count": 5,
   "industry_peers_count": 0,
   "sector_peers_count": 0,
   "other_peers_count": 5,
-  "summary": "Predicted GMP: 4.76% based on 5 peers (0 same-industry, 0 same-sector, 5 top-match) with similarity 91.81% - 92.29%.",
+  "summary": "Predicted GMP: 61.31% based on 5 peers (0 same-industry, 0 same-sector, 5 top-match) with similarity 77.53% - 80.56%.",
   "top_peers": [
     {
-      "name": "Invicta Diagnostic SME",
-      "year": 2025,
-      "similarity": 92.29,
-      "historical_gmp": 16.47,
+      "name": "Prevest Denpro Ltd",
+      "year": 2021,
+      "similarity": 80.56,
+      "historical_gmp": 114.94,
       "is_same_industry": false,
       "is_same_sector": false,
-      "issue_size_cr": 28.12,
-      "margin_pct": null
+      "issue_size_cr": 26.61,
+      "margin_pct": 27.78
     },
     {
-      "name": "Voler Car Ltd",
-      "year": 2025,
-      "similarity": 91.92,
-      "historical_gmp": 0.0,
-      "is_same_industry": false,
-      "is_same_sector": false,
-      "issue_size_cr": 27.0,
-      "margin_pct": null
-    },
-    {
-      "name": "Vishwas Agri Seeds SME",
-      "year": 2024,
-      "similarity": 91.92,
-      "historical_gmp": -1.16,
-      "is_same_industry": false,
-      "is_same_sector": false,
-      "issue_size_cr": 25.8,
-      "margin_pct": null
-    },
-    {
-      "name": "Sellowrap Industries SME",
-      "year": 2025,
-      "similarity": 91.89,
-      "historical_gmp": 8.43,
-      "is_same_industry": false,
-      "is_same_sector": false,
-      "issue_size_cr": 30.28,
-      "margin_pct": null
-    },
-    {
-      "name": "Auro Impex n SME",
+      "name": "Macfos Ltd",
       "year": 2023,
-      "similarity": 91.81,
-      "historical_gmp": 0.0,
+      "similarity": 79.1,
+      "historical_gmp": 80.39,
       "is_same_industry": false,
       "is_same_sector": false,
-      "issue_size_cr": 27.07,
-      "margin_pct": null
+      "issue_size_cr": 23.75,
+      "margin_pct": 2.631921
+    },
+    {
+      "name": "ACE Alpha Tech Ltd",
+      "year": 2025,
+      "similarity": 79.09,
+      "historical_gmp": 17.39,
+      "is_same_industry": false,
+      "is_same_sector": false,
+      "issue_size_cr": 32.22,
+      "margin_pct": 56.75
+    },
+    {
+      "name": "GEM Enviro SME",
+      "year": 2024,
+      "similarity": 78.09,
+      "historical_gmp": 90.0,
+      "is_same_industry": false,
+      "is_same_sector": false,
+      "issue_size_cr": 44.93,
+      "margin_pct": 5.33
+    },
+    {
+      "name": "Cell Point India SME",
+      "year": 2023,
+      "similarity": 77.53,
+      "historical_gmp": 2.0,
+      "is_same_industry": false,
+      "is_same_sector": false,
+      "issue_size_cr": 50.34,
+      "margin_pct": 2.631921
     }
   ],
-  "updated_at": "2026-11-27T10:04:52.103451"
+  "updated_at": "2026-11-27T11:11:53.809605"
 }

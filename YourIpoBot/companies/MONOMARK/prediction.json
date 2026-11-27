@@ -2,66 +2,66 @@
   "ipo_id": "monomark_2026",
   "canonical_name": "Monomark Engineering Limited",
   "stage": "FINAL_DAY_END",
-  "predicted_gmp_pct": 73.17,
+  "predicted_gmp_pct": 13.13,
   "confidence_level": "MODERATE",
-  "decision_badge": "STRONG_APPLY",
-  "decision_reason": "High predicted GMP (+73.17%) based on 5 fundamental peers.",
+  "decision_badge": "APPLY_FOR_GAIN",
+  "decision_reason": "Favorable predicted GMP (+13.13%) from fundamental peer benchmarks.",
   "peers_used_count": 5,
   "industry_peers_count": 0,
   "sector_peers_count": 0,
   "other_peers_count": 5,
-  "summary": "Predicted GMP: 73.17% based on 5 peers (0 same-industry, 0 same-sector, 5 top-match) with similarity 91.74% - 92.16%.",
+  "summary": "Predicted GMP: 13.13% based on 5 peers (0 same-industry, 0 same-sector, 5 top-match) with similarity 79.06% - 80.1%.",
   "top_peers": [
     {
-      "name": "Energy Mission Machineries SME",
-      "year": 2024,
-      "similarity": 92.16,
-      "historical_gmp": 165.22,
+      "name": "Global Longlife Hospital SME",
+      "year": 2022,
+      "similarity": 80.1,
+      "historical_gmp": 0.79,
       "is_same_industry": false,
       "is_same_sector": false,
-      "issue_size_cr": 41.15,
-      "margin_pct": null
+      "issue_size_cr": 49.0,
+      "margin_pct": -87529.63
     },
     {
-      "name": "Blue Water Logistics SME",
+      "name": "Chatterbox Technologies SME",
       "year": 2025,
-      "similarity": 92.0,
-      "historical_gmp": 4.44,
+      "similarity": 79.78,
+      "historical_gmp": 17.39,
       "is_same_industry": false,
       "is_same_sector": false,
-      "issue_size_cr": 40.5,
-      "margin_pct": null
+      "issue_size_cr": 42.86,
+      "margin_pct": 14.38
     },
     {
-      "name": "ARC Insulation SME",
-      "year": 2025,
-      "similarity": 91.77,
-      "historical_gmp": 16.0,
+      "name": "Bright Outdoor Media SME",
+      "year": 2023,
+      "similarity": 79.29,
+      "historical_gmp": 2.74,
       "is_same_industry": false,
       "is_same_sector": false,
-      "issue_size_cr": 41.19,
-      "margin_pct": null
+      "issue_size_cr": 55.48,
+      "margin_pct": 15.71
     },
     {
-      "name": "Eppeltone Engineers SME",
-      "year": 2025,
-      "similarity": 91.75,
-      "historical_gmp": 90.0,
+      "name": "Vasa Denticity Ltd",
+      "year": 2023,
+      "similarity": 79.15,
+      "historical_gmp": 64.84,
       "is_same_industry": false,
       "is_same_sector": false,
-      "issue_size_cr": 43.96,
-      "margin_pct": null
+      "issue_size_cr": 54.07,
+      "margin_pct": 2.631921
     },
     {
-      "name": "Kabra Jewels Ltd",
+      "name": "Logiciel Solutions SME",
       "year": 2025,
-      "similarity": 91.74,
-      "historical_gmp": 90.0,
+      "similarity": 79.06,
+      "historical_gmp": -20.0,
       "is_same_industry": false,
       "is_same_sector": false,
-      "issue_size_cr": 40.0,
-      "margin_pct": null
+      "issue_size_cr": 39.9,
+      "margin_pct": 26.19
     }
   ],
-  "updated_at": "2026-11-27T10:04:52.787389"
+  "updated_at": "2026-11-27T11:11:54.088595"
 }

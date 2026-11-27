@@ -2,66 +2,66 @@
   "ipo_id": "airpro_2026",
   "canonical_name": "Airpro Wireless Limited",
   "stage": "FINAL_DAY_END",
-  "predicted_gmp_pct": 28.22,
+  "predicted_gmp_pct": 33.02,
   "confidence_level": "MODERATE",
   "decision_badge": "STRONG_APPLY",
-  "decision_reason": "High predicted GMP (+28.22%) based on 5 fundamental peers.",
+  "decision_reason": "High predicted GMP (+33.02%) based on 5 fundamental peers.",
   "peers_used_count": 5,
   "industry_peers_count": 0,
   "sector_peers_count": 0,
   "other_peers_count": 5,
-  "summary": "Predicted GMP: 28.22% based on 5 peers (0 same-industry, 0 same-sector, 5 top-match) with similarity 91.92% - 92.09%.",
+  "summary": "Predicted GMP: 33.02% based on 5 peers (0 same-industry, 0 same-sector, 5 top-match) with similarity 78.32% - 79.93%.",
   "top_peers": [
     {
-      "name": "Apsis Aerocom Ltd",
-      "year": 2026,
-      "similarity": 92.09,
-      "historical_gmp": 39.09,
-      "is_same_industry": false,
-      "is_same_sector": false,
-      "issue_size_cr": 35.77,
-      "margin_pct": null
-    },
-    {
-      "name": "Royalarc Electrodes SME",
+      "name": "Chatterbox Technologies SME",
       "year": 2025,
-      "similarity": 92.07,
-      "historical_gmp": 0.0,
+      "similarity": 79.93,
+      "historical_gmp": 17.39,
       "is_same_industry": false,
       "is_same_sector": false,
-      "issue_size_cr": 36.0,
-      "margin_pct": null
+      "issue_size_cr": 42.86,
+      "margin_pct": 14.38
     },
     {
-      "name": "Sawaliya Foods Products SME",
-      "year": 2025,
-      "similarity": 92.05,
-      "historical_gmp": 90.0,
+      "name": "Cell Point India SME",
+      "year": 2023,
+      "similarity": 78.49,
+      "historical_gmp": 2.0,
       "is_same_industry": false,
       "is_same_sector": false,
-      "issue_size_cr": 34.83,
-      "margin_pct": null
+      "issue_size_cr": 50.34,
+      "margin_pct": 2.631921
     },
     {
-      "name": "Varanium Cloud Ltd",
+      "name": "Vasa Denticity Ltd",
+      "year": 2023,
+      "similarity": 78.38,
+      "historical_gmp": 64.84,
+      "is_same_industry": false,
+      "is_same_sector": false,
+      "issue_size_cr": 54.07,
+      "margin_pct": 2.631921
+    },
+    {
+      "name": "Macfos Ltd",
+      "year": 2023,
+      "similarity": 78.38,
+      "historical_gmp": 80.39,
+      "is_same_industry": false,
+      "is_same_sector": false,
+      "issue_size_cr": 23.75,
+      "margin_pct": 2.631921
+    },
+    {
+      "name": "Global Longlife Hospital SME",
       "year": 2022,
-      "similarity": 91.93,
-      "historical_gmp": 7.38,
+      "similarity": 78.32,
+      "historical_gmp": 0.79,
       "is_same_industry": false,
       "is_same_sector": false,
-      "issue_size_cr": 36.6,
-      "margin_pct": null
-    },
-    {
-      "name": "Paramatrix Technologies SME",
-      "year": 2024,
-      "similarity": 91.92,
-      "historical_gmp": 4.59,
-      "is_same_industry": false,
-      "is_same_sector": false,
-      "issue_size_cr": 33.84,
-      "margin_pct": null
+      "issue_size_cr": 49.0,
+      "margin_pct": -87529.63
     }
   ],
-  "updated_at": "2026-11-27T10:04:51.327237"
+  "updated_at": "2026-11-27T11:11:53.538234"
 }

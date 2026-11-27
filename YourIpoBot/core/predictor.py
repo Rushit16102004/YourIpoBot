@@ -92,7 +92,8 @@ class GMPSimilarityEngine:
     def compute_similarity(self, target: dict[str, Any], candidate: pd.Series) -> float:
         """Calculate weighted composite similarity score across fundamentals (excluding live subscription)."""
         size_scores = []
-        for col in ["issue_size_cr", "issue_base_price", "Fresh_Issue_Size_Norm", "OFS_Size_Norm"]:
+        # Pruned misleading OFS_Size_Norm as proven by quantitative ablation
+        for col in ["issue_size_cr", "issue_base_price", "Fresh_Issue_Size_Norm"]:
             v1 = self._normalize_currency_units(target.get(col)) if "size" in col.lower() else target.get(col)
             v2 = self._normalize_currency_units(candidate.get(col)) if "size" in col.lower() else candidate.get(col)
             s = self._feature_similarity(v1, v2, tolerance_ratio=1.5)
@@ -176,6 +177,8 @@ class GMPSimilarityEngine:
         if target_is_profitable is None and (target_ipo.get("Net_Profit_Margin_Pct") is not None):
             target_is_profitable = 1 if float(target_ipo["Net_Profit_Margin_Pct"]) > 0 else 0
 
+        target_size = self._normalize_currency_units(target_ipo.get("issue_size_cr"))
+
         for _, row in self.history_df.iterrows():
             # Hard Safety Filter: Profitable companies must only match profitable peers;
             # Loss-making companies must only match loss-making peers.
@@ -183,6 +186,15 @@ class GMPSimilarityEngine:
             if target_is_profitable is not None and pd.notna(cand_is_profitable):
                 if int(float(target_is_profitable)) != int(float(cand_is_profitable)):
                     continue
+
+            # Issue Size Liquidity Bracketing:
+            # Prevents a ₹200 Cr IPO from matching against a ₹20,000 Cr Mega-IPO
+            if target_size and target_size > 0:
+                cand_size = self._normalize_currency_units(row.get("issue_size_cr"))
+                if cand_size and cand_size > 0:
+                    ratio = cand_size / target_size
+                    if ratio < 0.15 or ratio > 6.0:  # Beyond reasonable liquidity bracket
+                        continue
 
             sim = self.compute_similarity(target_ipo, row)
             r_ind = str(row.get("industry") or "").lower().strip()

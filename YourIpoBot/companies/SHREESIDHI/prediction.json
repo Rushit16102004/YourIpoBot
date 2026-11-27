@@ -2,66 +2,66 @@
   "ipo_id": "shreesidhi_2026",
   "canonical_name": "Shree Siddhivinayak Greentech Industries Limited",
   "stage": "FINAL_DAY_END",
-  "predicted_gmp_pct": 26.98,
+  "predicted_gmp_pct": 48.24,
   "confidence_level": "MODERATE",
   "decision_badge": "STRONG_APPLY",
-  "decision_reason": "High predicted GMP (+26.98%) based on 5 fundamental peers.",
+  "decision_reason": "High predicted GMP (+48.24%) based on 5 fundamental peers.",
   "peers_used_count": 5,
   "industry_peers_count": 0,
   "sector_peers_count": 0,
   "other_peers_count": 5,
-  "summary": "Predicted GMP: 26.98% based on 5 peers (0 same-industry, 0 same-sector, 5 top-match) with similarity 91.77% - 92.31%.",
+  "summary": "Predicted GMP: 48.24% based on 5 peers (0 same-industry, 0 same-sector, 5 top-match) with similarity 78.46% - 79.3%.",
   "top_peers": [
     {
-      "name": "Sadhav Shipping SME",
-      "year": 2024,
-      "similarity": 92.31,
-      "historical_gmp": 42.11,
-      "is_same_industry": false,
-      "is_same_sector": false,
-      "issue_size_cr": 38.18,
-      "margin_pct": null
-    },
-    {
-      "name": "Value 360 Communications SME",
-      "year": 2026,
-      "similarity": 91.82,
-      "historical_gmp": -20.0,
-      "is_same_industry": false,
-      "is_same_sector": false,
-      "issue_size_cr": 41.69,
-      "margin_pct": null
-    },
-    {
-      "name": "Zeal Global Services SME",
-      "year": 2023,
-      "similarity": 91.78,
-      "historical_gmp": 42.72,
-      "is_same_industry": false,
-      "is_same_sector": false,
-      "issue_size_cr": 36.46,
-      "margin_pct": null
-    },
-    {
-      "name": "MARC Technocrats SME",
+      "name": "Chatterbox Technologies SME",
       "year": 2025,
-      "similarity": 91.78,
-      "historical_gmp": -20.0,
+      "similarity": 79.3,
+      "historical_gmp": 17.39,
       "is_same_industry": false,
       "is_same_sector": false,
-      "issue_size_cr": 42.59,
-      "margin_pct": null
+      "issue_size_cr": 42.86,
+      "margin_pct": 14.38
     },
     {
-      "name": "Nephro Care India SME",
+      "name": "Cell Point India SME",
+      "year": 2023,
+      "similarity": 79.25,
+      "historical_gmp": 2.0,
+      "is_same_industry": false,
+      "is_same_sector": false,
+      "issue_size_cr": 50.34,
+      "margin_pct": 2.631921
+    },
+    {
+      "name": "GEM Enviro SME",
       "year": 2024,
-      "similarity": 91.77,
+      "similarity": 78.86,
       "historical_gmp": 90.0,
       "is_same_industry": false,
       "is_same_sector": false,
-      "issue_size_cr": 41.26,
-      "margin_pct": null
+      "issue_size_cr": 44.93,
+      "margin_pct": 5.33
+    },
+    {
+      "name": "Prevest Denpro Ltd",
+      "year": 2021,
+      "similarity": 78.52,
+      "historical_gmp": 114.94,
+      "is_same_industry": false,
+      "is_same_sector": false,
+      "issue_size_cr": 26.61,
+      "margin_pct": 27.78
+    },
+    {
+      "name": "ACE Alpha Tech Ltd",
+      "year": 2025,
+      "similarity": 78.46,
+      "historical_gmp": 17.39,
+      "is_same_industry": false,
+      "is_same_sector": false,
+      "issue_size_cr": 32.22,
+      "margin_pct": 56.75
     }
   ],
-  "updated_at": "2026-11-27T10:04:53.447773"
+  "updated_at": "2026-11-27T11:11:54.327325"
 }
