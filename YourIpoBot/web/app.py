@@ -41,9 +41,10 @@ def index():
     # Read latest prediction for each IPO from their company folders
     ipos_list = []
     for r in active_ipos:
-        comp_dir_str = r[10]
-        comp_folder_name = Path(comp_dir_str).name
-        comp_dir = config.COMPANIES_DIR / comp_folder_name
+        comp_dir_str = str(r[10])
+        # Clean folder name from both Windows and POSIX path separators
+        clean_name = comp_dir_str.replace("\\", "/").rstrip("/").split("/")[-1]
+        comp_dir = config.COMPANIES_DIR / clean_name
         if not comp_dir.exists():
             comp_dir = Path(comp_dir_str)
         pred_file = comp_dir / "prediction.json"
@@ -106,8 +107,8 @@ def api_get_ipos():
 
     out = []
     for ipo_id, cname, comp_dir_str in rows:
-        comp_folder_name = Path(comp_dir_str).name
-        comp_dir = config.COMPANIES_DIR / comp_folder_name
+        clean_name = str(comp_dir_str).replace("\\", "/").rstrip("/").split("/")[-1]
+        comp_dir = config.COMPANIES_DIR / clean_name
         if not comp_dir.exists():
             comp_dir = Path(comp_dir_str)
         p_file = comp_dir / "prediction.json"

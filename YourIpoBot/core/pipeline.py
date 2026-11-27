@@ -121,9 +121,8 @@ class YourIpoBotPipeline:
             return
 
         cname, comp_dir_str, is_sme, price_max, size_cr = row
-        # Resolve company_dir dynamically relative to config.COMPANIES_DIR
-        comp_folder_name = Path(comp_dir_str).name
-        comp_dir = config.COMPANIES_DIR / comp_folder_name
+        clean_name = str(comp_dir_str).replace("\\", "/").rstrip("/").split("/")[-1]
+        comp_dir = config.COMPANIES_DIR / clean_name
         if not comp_dir.exists():
             comp_dir = Path(comp_dir_str)
         comp_dir.mkdir(parents=True, exist_ok=True)
