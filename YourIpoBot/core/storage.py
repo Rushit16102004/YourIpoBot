@@ -90,6 +90,67 @@ def get_company_folder(canonical_name: str) -> Path:
     return folder
 
 
+def determine_is_sme(
+    canonical_name: str = "",
+    symbol: Optional[str] = None,
+    issue_type: Optional[str] = None,
+    segment: Optional[str] = None,
+    exchange: Optional[str] = None,
+    lot_size: Optional[int | float] = None,
+    issue_size_cr: Optional[float] = None,
+    explicit_is_sme: Optional[bool] = None,
+) -> bool:
+    """
+    Accurately detects whether an IPO is SME or Mainboard using multiple institutional rules:
+    1. Explicit boolean flag if provided.
+    2. Exchange / Platform tags ('BSE SME', 'NSE Emerge', 'Emerge', 'SME').
+    3. Issue Type strings ('SME', 'BSE SME', 'SME IPO', 'Book Building (SME)', 'Fixed Price (SME)').
+    4. Company Name / Symbol tags ('SME', 'EMERGE', '-SM', '-ST').
+    5. Lot Size heuristic: SEBI mandates SME minimum application of ₹1.0-1.2 Lakh,
+       meaning lot sizes are almost universally >= 500 - 4000 shares (Mainboard is 15-100 shares).
+    6. Issue size: SEBI post-issue capital limit for SME is ₹25 Cr. If issue_size > ₹250 Cr, it is Mainboard.
+    """
+    if explicit_is_sme is True:
+        return True
+
+    name_upper = (canonical_name or "").upper()
+    sym_upper = (symbol or "").upper()
+    type_upper = (issue_type or "").upper()
+    seg_upper = (segment or "").upper()
+    exch_upper = (exchange or "").upper()
+
+    # Check text indicators in name, symbol, type, segment, or exchange
+    text_blob = f"{name_upper} {sym_upper} {type_upper} {seg_upper} {exch_upper}"
+    sme_keywords = ["SME", "EMERGE", "NSE EMERGE", "BSE SME", "SME IPO", "SME ISSUE", "BSESME", "NSEEMERGE"]
+    for kw in sme_keywords:
+        if kw in text_blob:
+            return True
+
+    if sym_upper.endswith("-SM") or sym_upper.endswith("-ST") or sym_upper.endswith(".SME"):
+        return True
+
+    # Lot size rule: SEBI minimum application value ₹1.0 - 1.2 Lakh means lot size >= 500
+    if lot_size is not None:
+        try:
+            if float(lot_size) >= 500:
+                return True
+        except (ValueError, TypeError):
+            pass
+
+    # Issue size hard filter: definitely Mainboard if > 250 Cr
+    if issue_size_cr is not None:
+        try:
+            if float(issue_size_cr) > 250.0:
+                return False
+        except (ValueError, TypeError):
+            pass
+
+    if explicit_is_sme is not None:
+        return bool(explicit_is_sme)
+
+    return False
+
+
 def register_new_ipo(
     canonical_name: str,
     symbol: Optional[str] = None,
@@ -99,6 +160,10 @@ def register_new_ipo(
     price_min: Optional[float] = None,
     price_max: Optional[float] = None,
     issue_size_cr: Optional[float] = None,
+    issue_type: Optional[str] = None,
+    segment: Optional[str] = None,
+    exchange: Optional[str] = None,
+    lot_size: Optional[int | float] = None,
 ) -> str:
     """Add a newly approved IPO to active_ipo_queue with dedicated company folder."""
     import re
@@ -107,7 +172,19 @@ def register_new_ipo(
     ipo_id = f"{norm_name}_{yr}"
     comp_dir = get_company_folder(canonical_name)
 
-    anchor_init = "NOT_APPLICABLE" if is_sme else "PENDING"
+    # Automatically and accurately resolve SME vs Mainboard
+    resolved_is_sme = determine_is_sme(
+        canonical_name=canonical_name,
+        symbol=symbol,
+        issue_type=issue_type,
+        segment=segment,
+        exchange=exchange,
+        lot_size=lot_size,
+        issue_size_cr=issue_size_cr,
+        explicit_is_sme=is_sme,
+    )
+
+    anchor_init = "NOT_APPLICABLE" if resolved_is_sme else "PENDING"
     now_iso = datetime.now().isoformat()
 
     with get_connection() as conn:
@@ -120,6 +197,8 @@ def register_new_ipo(
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ON CONFLICT(ipo_id) DO UPDATE SET
                 symbol = COALESCE(excluded.symbol, active_ipo_queue.symbol),
+                is_sme = excluded.is_sme,
+                is_mainboard = excluded.is_mainboard,
                 issue_open_date = COALESCE(excluded.issue_open_date, active_ipo_queue.issue_open_date),
                 issue_close_date = COALESCE(excluded.issue_close_date, active_ipo_queue.issue_close_date),
                 issue_price_max = COALESCE(excluded.issue_price_max, active_ipo_queue.issue_price_max),
@@ -130,8 +209,8 @@ def register_new_ipo(
                 ipo_id,
                 canonical_name,
                 symbol,
-                1 if is_sme else 0,
-                0 if is_sme else 1,
+                1 if resolved_is_sme else 0,
+                0 if resolved_is_sme else 1,
                 issue_open,
                 issue_close,
                 price_min,
@@ -154,7 +233,7 @@ def register_new_ipo(
                     "ipo_id": ipo_id,
                     "canonical_name": canonical_name,
                     "symbol": symbol,
-                    "is_sme": is_sme,
+                    "is_sme": resolved_is_sme,
                     "issue_open": issue_open,
                     "issue_close": issue_close,
                     "price_band": [price_min, price_max],

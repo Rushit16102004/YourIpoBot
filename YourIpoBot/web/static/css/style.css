@@ -175,12 +175,20 @@ body {
     color: var(--text-secondary);
 }
 
-/* Section Header */
+/* Section Header & Filters */
 .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.header-left-group {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-bottom: 20px;
 }
 
 .section-header h2 {
@@ -195,6 +203,40 @@ body {
     padding: 4px 10px;
     border-radius: 999px;
     font-weight: 600;
+}
+
+/* Filter Button Group */
+.filter-btn-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(30, 41, 59, 0.7);
+    padding: 4px 6px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+}
+
+.filter-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    padding: 6px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.filter-btn:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.filter-btn.active {
+    background: var(--accent-blue);
+    color: #ffffff;
+    box-shadow: 0 2px 10px var(--accent-blue-glow);
 }
 
 /* Cards Grid */

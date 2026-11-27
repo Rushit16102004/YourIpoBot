@@ -25,7 +25,7 @@ import requests
 from YourIpoBot import config
 from YourIpoBot.core.downloader import SafePdfDownloader
 from YourIpoBot.core.predictor import GMPSimilarityEngine
-from YourIpoBot.core.storage import get_company_folder, get_connection, init_db, register_new_ipo
+from YourIpoBot.core.storage import determine_is_sme, get_company_folder, get_connection, init_db, register_new_ipo
 
 logger = logging.getLogger("YourIpoBot.pipeline")
 
@@ -94,7 +94,11 @@ class YourIpoBotPipeline:
                         register_new_ipo(
                             canonical_name=cname,
                             symbol=item.get("Symbol"),
-                            is_sme=(item.get("Issue_Type") == "SME"),
+                            issue_type=item.get("Issue_Type"),
+                            segment=item.get("Segment"),
+                            exchange=item.get("Exchange"),
+                            lot_size=item.get("Lot_Size") or item.get("Market_Lot"),
+                            issue_size_cr=item.get("Issue_Size"),
                             issue_open=item.get("Issue_Open_Date"),
                             issue_close=item.get("Issue_Close_Date"),
                         )

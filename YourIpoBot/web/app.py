@@ -34,7 +34,15 @@ def index():
                    q.issue_size_cr, q.issue_open_date, q.issue_close_date,
                    q.rhp_status, q.anchor_status, q.company_dir
             FROM active_ipo_queue q
-            ORDER BY q.issue_open_date DESC NULLS LAST;
+            ORDER BY 
+                CASE 
+                    WHEN q.issue_close_date IS NOT NULL AND q.issue_close_date >= DATE('now') THEN 0
+                    WHEN q.issue_open_date IS NOT NULL AND q.issue_open_date >= DATE('now') THEN 1
+                    WHEN q.issue_open_date IS NOT NULL THEN 2
+                    ELSE 3
+                END ASC,
+                q.issue_open_date ASC NULLS LAST,
+                q.canonical_name ASC;
             """
         ).fetchall()
 
@@ -96,7 +104,16 @@ def index():
     with get_connection() as conn:
         total_hist = conn.execute("SELECT COUNT(*) FROM ipo_merged_master;").fetchone()[0]
 
-    return render_template("dashboard.html", ipos=ipos_list, total_hist_count=total_hist)
+    mainboard_count = sum(1 for ipo in ipos_list if not ipo["is_sme"])
+    sme_count = sum(1 for ipo in ipos_list if ipo["is_sme"])
+
+    return render_template(
+        "dashboard.html",
+        ipos=ipos_list,
+        total_hist_count=total_hist,
+        mainboard_count=mainboard_count,
+        sme_count=sme_count,
+    )
 
 
 @app.route("/api/ipos", methods=["GET"])

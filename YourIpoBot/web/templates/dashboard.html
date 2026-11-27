@@ -60,13 +60,27 @@
             <!-- Active IPO Predictions Section -->
             <section class="ipos-section">
                 <div class="section-header">
-                    <h2>Live IPOs & Quantitative Predictions</h2>
-                    <span class="section-tag">Dynamic Timetable Driven</span>
+                    <div class="header-left-group">
+                        <h2>Live IPOs & Quantitative Predictions</h2>
+                        <span class="section-tag">Dynamic Timetable Driven</span>
+                    </div>
+                    <!-- Interactive Board Filter Buttons -->
+                    <div class="filter-btn-group">
+                        <button class="filter-btn active" id="btn-filter-all" onclick="filterBoard('ALL', this)">
+                            All ({{ ipos|length }})
+                        </button>
+                        <button class="filter-btn" id="btn-filter-mainboard" onclick="filterBoard('MAINBOARD', this)">
+                            Mainboard ({{ mainboard_count }})
+                        </button>
+                        <button class="filter-btn" id="btn-filter-sme" onclick="filterBoard('SME', this)">
+                            SME ({{ sme_count }})
+                        </button>
+                    </div>
                 </div>
 
                 <div class="cards-grid">
                     {% for ipo in ipos %}
-                    <div class="ipo-card">
+                    <div class="ipo-card" data-board="{{ ipo.board|upper }}">
                         <div class="card-top">
                             <div class="company-info">
                                 <span class="board-badge {{ 'badge-sme' if ipo.is_sme else 'badge-mainboard' }}">
