@@ -1,49 +1,67 @@
 {
   "ipo_id": "foodlinkfbholdingsindialimited_2026",
   "canonical_name": "Foodlink F&B Holdings (India) Limited",
-  "stage": "DAY3_PRE_CUTOFF",
-  "predicted_gmp_pct": -9.37,
+  "stage": "FINAL_DAY_END",
+  "predicted_gmp_pct": 48.41,
   "confidence_level": "MODERATE",
-  "peers_used_count": 4,
-  "sector_peers_count": 0,
-  "summary": "Predicted GMP: -9.37% based on 4 peers (0 same-sector, 4 cross-sector) with similarity 80.2% - 81.73%.",
+  "decision_badge": "RISK_CAUTION",
+  "decision_reason": "Subdued institutional interest (QIB: 2.1x, Total: 4.5x). Caution advised.",
+  "peers_used_count": 5,
+  "industry_peers_count": 0,
+  "sector_peers_count": 1,
+  "other_peers_count": 4,
+  "summary": "Predicted GMP: 48.41% based on 5 peers (0 same-industry, 1 same-sector, 4 top-match) with similarity 87.3% - 85.0%.",
   "top_peers": [
     {
-      "name": "Om Freight Forwarders IPO",
-      "year": 2025,
-      "similarity": 81.73,
-      "historical_gmp": -39.63,
-      "is_same_sector": false,
-      "issue_size_cr": 122.31,
-      "margin_pct": 4.23
+      "name": "IRCTC IPO",
+      "year": 2019,
+      "similarity": 85.0,
+      "historical_gmp": 95.62,
+      "is_same_industry": false,
+      "is_same_sector": true,
+      "issue_size_cr": 645.12,
+      "margin_pct": null
     },
     {
-      "name": "Monika Alcobev Ltd",
+      "name": "Shringar House of IPO",
       "year": 2025,
-      "similarity": 81.25,
-      "historical_gmp": 0.7,
+      "similarity": 88.0,
+      "historical_gmp": 14.24,
+      "is_same_industry": false,
       "is_same_sector": false,
-      "issue_size_cr": 165.63,
-      "margin_pct": 10.67
+      "issue_size_cr": 400.95,
+      "margin_pct": 5.17
     },
     {
-      "name": "Sharvaya Metals SME",
-      "year": 2025,
-      "similarity": 80.42,
-      "historical_gmp": 11.73,
+      "name": "Vraj Iron and IPO",
+      "year": 2024,
+      "similarity": 87.98,
+      "historical_gmp": 15.94,
+      "is_same_industry": false,
       "is_same_sector": false,
-      "issue_size_cr": 58.8,
-      "margin_pct": 11.04
+      "issue_size_cr": 171.0,
+      "margin_pct": 4.63
     },
     {
-      "name": "Brigade Hotel Ventures IPO",
+      "name": "Arisinfra Solutions IPO",
       "year": 2025,
-      "similarity": 80.2,
-      "historical_gmp": -9.89,
+      "similarity": 87.69,
+      "historical_gmp": -7.66,
+      "is_same_industry": false,
       "is_same_sector": false,
-      "issue_size_cr": 759.6,
-      "margin_pct": 11.13
+      "issue_size_cr": 499.6,
+      "margin_pct": 4.94
+    },
+    {
+      "name": "BLS E-Services IPO",
+      "year": 2024,
+      "similarity": 87.3,
+      "historical_gmp": 125.93,
+      "is_same_industry": false,
+      "is_same_sector": false,
+      "issue_size_cr": 309.29,
+      "margin_pct": 5.03
     }
   ],
-  "updated_at": "2026-11-26T15:38:18.980321"
+  "updated_at": "2026-11-27T10:04:50.681452"
 }

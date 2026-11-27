@@ -55,6 +55,19 @@ def index():
             except Exception:
                 pass
 
+        # Dynamically check actual files on disk
+        has_rhp_file = (comp_dir / "rhp.pdf").exists()
+        has_anchor_file = (comp_dir / "anchor.pdf").exists()
+        
+        db_rhp = r[8]
+        db_anchor = r[9]
+
+        rhp_disp = "DOWNLOADED" if has_rhp_file else db_rhp
+        if bool(r[3]): # SME has no anchor
+            anchor_disp = "NOT_APPLICABLE"
+        else:
+            anchor_disp = "DOWNLOADED" if has_anchor_file else db_anchor
+
         ipos_list.append(
             {
                 "ipo_id": r[0],
@@ -66,8 +79,8 @@ def index():
                 "issue_size_cr": r[5],
                 "issue_open": r[6] or "TBD",
                 "issue_close": r[7] or "TBD",
-                "rhp_status": r[8],
-                "anchor_status": r[9],
+                "rhp_status": rhp_disp,
+                "anchor_status": anchor_disp,
                 "predicted_gmp": pred_data.get("predicted_gmp_pct"),
                 "confidence": pred_data.get("confidence_level", "TBD"),
                 "decision_badge": pred_data.get("decision_badge", "NEUTRAL_PENDING"),

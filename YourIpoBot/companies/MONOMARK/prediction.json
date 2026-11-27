@@ -1,0 +1,67 @@
+{
+  "ipo_id": "monomark_2026",
+  "canonical_name": "Monomark Engineering Limited",
+  "stage": "FINAL_DAY_END",
+  "predicted_gmp_pct": 73.17,
+  "confidence_level": "MODERATE",
+  "decision_badge": "STRONG_APPLY",
+  "decision_reason": "High predicted GMP (+73.17%) based on 5 fundamental peers.",
+  "peers_used_count": 5,
+  "industry_peers_count": 0,
+  "sector_peers_count": 0,
+  "other_peers_count": 5,
+  "summary": "Predicted GMP: 73.17% based on 5 peers (0 same-industry, 0 same-sector, 5 top-match) with similarity 91.74% - 92.16%.",
+  "top_peers": [
+    {
+      "name": "Energy Mission Machineries SME",
+      "year": 2024,
+      "similarity": 92.16,
+      "historical_gmp": 165.22,
+      "is_same_industry": false,
+      "is_same_sector": false,
+      "issue_size_cr": 41.15,
+      "margin_pct": null
+    },
+    {
+      "name": "Blue Water Logistics SME",
+      "year": 2025,
+      "similarity": 92.0,
+      "historical_gmp": 4.44,
+      "is_same_industry": false,
+      "is_same_sector": false,
+      "issue_size_cr": 40.5,
+      "margin_pct": null
+    },
+    {
+      "name": "ARC Insulation SME",
+      "year": 2025,
+      "similarity": 91.77,
+      "historical_gmp": 16.0,
+      "is_same_industry": false,
+      "is_same_sector": false,
+      "issue_size_cr": 41.19,
+      "margin_pct": null
+    },
+    {
+      "name": "Eppeltone Engineers SME",
+      "year": 2025,
+      "similarity": 91.75,
+      "historical_gmp": 90.0,
+      "is_same_industry": false,
+      "is_same_sector": false,
+      "issue_size_cr": 43.96,
+      "margin_pct": null
+    },
+    {
+      "name": "Kabra Jewels Ltd",
+      "year": 2025,
+      "similarity": 91.74,
+      "historical_gmp": 90.0,
+      "is_same_industry": false,
+      "is_same_sector": false,
+      "issue_size_cr": 40.0,
+      "margin_pct": null
+    }
+  ],
+  "updated_at": "2026-11-27T10:04:52.787389"
+}

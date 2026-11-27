@@ -1,0 +1,67 @@
+{
+  "ipo_id": "airpro_2026",
+  "canonical_name": "Airpro Wireless Limited",
+  "stage": "FINAL_DAY_END",
+  "predicted_gmp_pct": 28.22,
+  "confidence_level": "MODERATE",
+  "decision_badge": "STRONG_APPLY",
+  "decision_reason": "High predicted GMP (+28.22%) based on 5 fundamental peers.",
+  "peers_used_count": 5,
+  "industry_peers_count": 0,
+  "sector_peers_count": 0,
+  "other_peers_count": 5,
+  "summary": "Predicted GMP: 28.22% based on 5 peers (0 same-industry, 0 same-sector, 5 top-match) with similarity 91.92% - 92.09%.",
+  "top_peers": [
+    {
+      "name": "Apsis Aerocom Ltd",
+      "year": 2026,
+      "similarity": 92.09,
+      "historical_gmp": 39.09,
+      "is_same_industry": false,
+      "is_same_sector": false,
+      "issue_size_cr": 35.77,
+      "margin_pct": null
+    },
+    {
+      "name": "Royalarc Electrodes SME",
+      "year": 2025,
+      "similarity": 92.07,
+      "historical_gmp": 0.0,
+      "is_same_industry": false,
+      "is_same_sector": false,
+      "issue_size_cr": 36.0,
+      "margin_pct": null
+    },
+    {
+      "name": "Sawaliya Foods Products SME",
+      "year": 2025,
+      "similarity": 92.05,
+      "historical_gmp": 90.0,
+      "is_same_industry": false,
+      "is_same_sector": false,
+      "issue_size_cr": 34.83,
+      "margin_pct": null
+    },
+    {
+      "name": "Varanium Cloud Ltd",
+      "year": 2022,
+      "similarity": 91.93,
+      "historical_gmp": 7.38,
+      "is_same_industry": false,
+      "is_same_sector": false,
+      "issue_size_cr": 36.6,
+      "margin_pct": null
+    },
+    {
+      "name": "Paramatrix Technologies SME",
+      "year": 2024,
+      "similarity": 91.92,
+      "historical_gmp": 4.59,
+      "is_same_industry": false,
+      "is_same_sector": false,
+      "issue_size_cr": 33.84,
+      "margin_pct": null
+    }
+  ],
+  "updated_at": "2026-11-27T10:04:51.327237"
+}

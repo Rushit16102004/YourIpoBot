@@ -1,0 +1,67 @@
+{
+  "ipo_id": "ajpack_2026",
+  "canonical_name": "AJ Packaging Limited",
+  "stage": "FINAL_DAY_END",
+  "predicted_gmp_pct": 4.76,
+  "confidence_level": "MODERATE",
+  "decision_badge": "NEUTRAL_PENDING",
+  "decision_reason": "Awaiting final bidding demand confirmation.",
+  "peers_used_count": 5,
+  "industry_peers_count": 0,
+  "sector_peers_count": 0,
+  "other_peers_count": 5,
+  "summary": "Predicted GMP: 4.76% based on 5 peers (0 same-industry, 0 same-sector, 5 top-match) with similarity 91.81% - 92.29%.",
+  "top_peers": [
+    {
+      "name": "Invicta Diagnostic SME",
+      "year": 2025,
+      "similarity": 92.29,
+      "historical_gmp": 16.47,
+      "is_same_industry": false,
+      "is_same_sector": false,
+      "issue_size_cr": 28.12,
+      "margin_pct": null
+    },
+    {
+      "name": "Voler Car Ltd",
+      "year": 2025,
+      "similarity": 91.92,
+      "historical_gmp": 0.0,
+      "is_same_industry": false,
+      "is_same_sector": false,
+      "issue_size_cr": 27.0,
+      "margin_pct": null
+    },
+    {
+      "name": "Vishwas Agri Seeds SME",
+      "year": 2024,
+      "similarity": 91.92,
+      "historical_gmp": -1.16,
+      "is_same_industry": false,
+      "is_same_sector": false,
+      "issue_size_cr": 25.8,
+      "margin_pct": null
+    },
+    {
+      "name": "Sellowrap Industries SME",
+      "year": 2025,
+      "similarity": 91.89,
+      "historical_gmp": 8.43,
+      "is_same_industry": false,
+      "is_same_sector": false,
+      "issue_size_cr": 30.28,
+      "margin_pct": null
+    },
+    {
+      "name": "Auro Impex n SME",
+      "year": 2023,
+      "similarity": 91.81,
+      "historical_gmp": 0.0,
+      "is_same_industry": false,
+      "is_same_sector": false,
+      "issue_size_cr": 27.07,
+      "margin_pct": null
+    }
+  ],
+  "updated_at": "2026-11-27T10:04:52.103451"
+}
