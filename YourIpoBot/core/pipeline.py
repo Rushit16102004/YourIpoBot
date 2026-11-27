@@ -180,8 +180,12 @@ class YourIpoBotPipeline:
                     "stage": stage,
                     "predicted_gmp_pct": pred.predicted_gmp_pct,
                     "confidence_level": pred.confidence_level,
+                    "decision_badge": pred.decision_badge,
+                    "decision_reason": pred.decision_reason,
                     "peers_used_count": pred.peers_used_count,
+                    "industry_peers_count": pred.industry_peers_count,
                     "sector_peers_count": pred.sector_peers_count,
+                    "other_peers_count": pred.other_peers_count,
                     "summary": pred.summary_message,
                     "top_peers": [
                         {
@@ -189,6 +193,7 @@ class YourIpoBotPipeline:
                             "year": p.ipo_year,
                             "similarity": p.similarity_score,
                             "historical_gmp": p.historical_gmp_pct,
+                            "is_same_industry": p.is_same_industry,
                             "is_same_sector": p.is_same_sector,
                             "issue_size_cr": p.issue_size_cr,
                             "margin_pct": p.net_profit_margin_pct,

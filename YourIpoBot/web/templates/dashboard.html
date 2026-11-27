@@ -42,8 +42,8 @@
                 </div>
                 <div class="stat-card">
                     <span class="stat-label">Prediction Algorithm</span>
-                    <span class="stat-value">5-Tier k-NN</span>
-                    <span class="stat-desc">Sector-Priority (≥80% match)</span>
+                    <span class="stat-value">Fundamental k-NN</span>
+                    <span class="stat-desc">3-Tier Priority (≥83% match)</span>
                 </div>
                 <div class="stat-card">
                     <span class="stat-label">Critical Retail Window</span>
@@ -84,6 +84,11 @@
                                 {% else %}
                                     <span class="gmp-value gmp-na">TBD</span>
                                 {% endif %}
+                                {% if ipo.decision_badge %}
+                                    <div class="decision-pill badge-{{ ipo.decision_badge|lower }}">
+                                        {{ ipo.decision_badge|replace('_', ' ') }}
+                                    </div>
+                                {% endif %}
                                 <span class="confidence-badge conf-{{ ipo.confidence|lower }}">{{ ipo.confidence }} Confidence</span>
                             </div>
                         </div>
@@ -117,7 +122,7 @@
 
                         <!-- Top 5 Matched Peers Drawer -->
                         <div class="peers-drawer">
-                            <span class="drawer-title">Top 5 Historical Benchmark Peers (Similarity ≥80%):</span>
+                            <span class="drawer-title">Top 5 Historical Benchmark Peers (Similarity ≥83%):</span>
                             {% if ipo.top_peers %}
                             <div class="peers-list">
                                 {% for peer in ipo.top_peers %}

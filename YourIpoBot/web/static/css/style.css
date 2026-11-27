@@ -292,6 +292,51 @@ body {
     color: var(--text-muted);
 }
 
+.decision-pill {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.badge-strong_apply {
+    background: rgba(16, 185, 129, 0.25);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.5);
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+}
+
+.badge-apply_for_gain {
+    background: rgba(245, 158, 11, 0.25);
+    color: #fbbf24;
+    border: 1px solid rgba(245, 158, 11, 0.5);
+}
+
+.badge-risk_caution {
+    background: rgba(249, 115, 22, 0.25);
+    color: #fb923c;
+    border: 1px solid rgba(249, 115, 22, 0.5);
+}
+
+.badge-avoid {
+    background: rgba(239, 68, 68, 0.25);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.5);
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+}
+
+.badge-neutral_pending {
+    background: rgba(148, 163, 184, 0.2);
+    color: #cbd5e1;
+    border: 1px solid rgba(148, 163, 184, 0.3);
+}
+
 .confidence-badge {
     font-size: 11px;
     font-weight: 700;

@@ -45,6 +45,8 @@ class GMPPredictionResponse:
     canonical_name: str
     predicted_gmp_pct: Optional[float]
     confidence_level: str               # HIGH, MODERATE, LOW, INSUFFICIENT_DATA
+    decision_badge: str                 # STRONG_APPLY, APPLY_FOR_GAIN, RISK_CAUTION, AVOID, NEUTRAL_PENDING
+    decision_reason: str                # Explanatory trigger reason
     peers_used_count: int
     industry_peers_count: int
     sector_peers_count: int
@@ -88,13 +90,7 @@ class GMPSimilarityEngine:
         return max(0.0, 1.0 - (rel_diff / (tolerance_ratio * 1.5)))
 
     def compute_similarity(self, target: dict[str, Any], candidate: pd.Series) -> float:
-        """Calculate weighted composite similarity score between target and candidate."""
-        sub_scores = []
-        for col in ["total_sub", "QIB_sum", "nii_sum", "retail_sum"]:
-            s = self._feature_similarity(target.get(col), candidate.get(col), tolerance_ratio=1.2)
-            if s is not None:
-                sub_scores.append(s)
-
+        """Calculate weighted composite similarity score across fundamentals (excluding live subscription)."""
         size_scores = []
         for col in ["issue_size_cr", "issue_base_price", "Fresh_Issue_Size_Norm", "OFS_Size_Norm"]:
             v1 = self._normalize_currency_units(target.get(col)) if "size" in col.lower() else target.get(col)
@@ -130,9 +126,8 @@ class GMPSimilarityEngine:
             other_scores.append(0.5)
 
         group_weights = {
-            "sub": (np.mean(sub_scores) if sub_scores else None, config.WEIGHT_SUBSCRIPTION),
-            "size": (np.mean(size_scores) if size_scores else None, config.WEIGHT_ISSUE_SIZE),
             "prof": (np.mean(prof_scores) if prof_scores else None, config.WEIGHT_PROFITABILITY),
+            "size": (np.mean(size_scores) if size_scores else None, config.WEIGHT_ISSUE_SIZE),
             "debt": (np.mean(debt_scores) if debt_scores else None, config.WEIGHT_DEBT_CASH),
             "other": (np.mean(other_scores) if other_scores else None, config.WEIGHT_OTHER_INFO),
         }
@@ -247,11 +242,45 @@ class GMPSimilarityEngine:
             f"with similarity {selected_peers[-1].similarity_score}% - {selected_peers[0].similarity_score}%."
         )
 
+        # Real-Time Decision Logic based on live QIB / NII / Total subscription & Predicted GMP
+        # Rules:
+        # 1. QIB >= 10x & NII >= 6x AND GMP >= 15% -> STRONG_APPLY
+        # 2. QIB >= 8x & NII >= 4x AND GMP >= 5% to 15% -> APPLY_FOR_GAIN
+        # 3. QIB < 5x or Total < 2x (Any GMP) -> RISK_CAUTION
+        # 4. GMP < 0% (Any subscription) -> AVOID
+        qib_val = float(target_ipo.get("QIB_sum") or target_ipo.get("qib_sub") or 0.0)
+        nii_val = float(target_ipo.get("nii_sum") or target_ipo.get("nii_sub") or 0.0)
+        total_sub_val = float(target_ipo.get("total_sub") or 0.0)
+
+        decision_badge = "NEUTRAL_PENDING"
+        decision_reason = "Awaiting final bidding demand confirmation."
+
+        if pred_gmp < 0.0:
+            decision_badge = "AVOID"
+            decision_reason = f"Predicted GMP is negative ({pred_gmp}%). High risk of listing discount."
+        elif (qib_val > 0 and qib_val < 5.0) or (total_sub_val > 0 and total_sub_val < 2.0):
+            decision_badge = "RISK_CAUTION"
+            decision_reason = f"Subdued institutional interest (QIB: {qib_val}x, Total: {total_sub_val}x). Caution advised."
+        elif qib_val >= 10.0 and nii_val >= 6.0 and pred_gmp >= 15.0:
+            decision_badge = "STRONG_APPLY"
+            decision_reason = f"Robust institutional demand (QIB: {qib_val}x, NII: {nii_val}x) with strong GMP (+{pred_gmp}%)."
+        elif qib_val >= 8.0 and nii_val >= 4.0 and pred_gmp >= 5.0:
+            decision_badge = "APPLY_FOR_GAIN"
+            decision_reason = f"Solid institutional demand (QIB: {qib_val}x, NII: {nii_val}x) with positive GMP (+{pred_gmp}%)."
+        elif pred_gmp >= 15.0:
+            decision_badge = "STRONG_APPLY"
+            decision_reason = f"High predicted GMP (+{pred_gmp}%) based on {len(selected_peers)} fundamental peers."
+        elif pred_gmp >= 5.0:
+            decision_badge = "APPLY_FOR_GAIN"
+            decision_reason = f"Favorable predicted GMP (+{pred_gmp}%) from fundamental peer benchmarks."
+
         return GMPPredictionResponse(
             target_ipo_id=target_id,
             canonical_name=cname,
             predicted_gmp_pct=pred_gmp,
             confidence_level=confidence,
+            decision_badge=decision_badge,
+            decision_reason=decision_reason,
             peers_used_count=len(selected_peers),
             industry_peers_count=industry_count,
             sector_peers_count=sector_count,

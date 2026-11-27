@@ -66,6 +66,8 @@ def index():
                 "anchor_status": r[9],
                 "predicted_gmp": pred_data.get("predicted_gmp_pct"),
                 "confidence": pred_data.get("confidence_level", "TBD"),
+                "decision_badge": pred_data.get("decision_badge", "NEUTRAL_PENDING"),
+                "decision_reason": pred_data.get("decision_reason", ""),
                 "peers_count": pred_data.get("peers_used_count", 0),
                 "summary": pred_data.get("summary", "Pending analysis"),
                 "top_peers": pred_data.get("top_peers", []),

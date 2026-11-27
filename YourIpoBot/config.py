@@ -37,12 +37,12 @@ MAX_RHP_PER_DAY: int = 1
 MAX_ANCHOR_PER_DAY: int = 2
 MIN_HOURS_BETWEEN_ANCHOR_DOWNLOADS: float = 1.0
 
-# Similarity & Peer Selection Weights
-WEIGHT_SUBSCRIPTION: float = 0.30       # QIB / NII / Total Subscription
-WEIGHT_ISSUE_SIZE: float = 0.20         # Issue Size & Base Price
-WEIGHT_PROFITABILITY: float = 0.25      # Margins & Net Profit
-WEIGHT_DEBT_CASH: float = 0.15          # Debt-to-Equity, Cash, OFS vs Fresh
-WEIGHT_OTHER_INFO: float = 0.10         # Sector, Governance, Promoter Stake
+# Similarity & Peer Selection Weights (Bidding subscription removed from similarity matching)
+WEIGHT_SUBSCRIPTION: float = 0.00       # Ignored in peer similarity matching (used for Apply/Avoid filter)
+WEIGHT_PROFITABILITY: float = 0.35      # Margins & Net Profit (35%)
+WEIGHT_ISSUE_SIZE: float = 0.25         # Issue Size & Base Price (25%)
+WEIGHT_DEBT_CASH: float = 0.20          # Debt-to-Equity, Cash, OFS vs Fresh (20%)
+WEIGHT_OTHER_INFO: float = 0.20         # Sector, Governance, Promoter Stake (20%)
 
-SIMILARITY_THRESHOLD: float = 85.0      # Minimum % match required (raised to 85% per user specification)
+SIMILARITY_THRESHOLD: float = 83.0      # Minimum % match required (adjusted to 83% per user specification)
 TOP_PEERS_COUNT: int = 5                # Number of historical peers to average
