@@ -100,12 +100,30 @@ class GMPSimilarityEngine:
                 size_scores.append(s)
 
         prof_scores = []
-        for col in ["Net_Profit_Margin_Pct", "Operating_Margin_Pct", "Revenue_Current_Norm", "PAT_Norm", "EBITDA_Norm", "EPS"]:
-            v1 = self._normalize_currency_units(target.get(col)) if any(k in col for k in ["Revenue", "PAT", "EBITDA"]) else target.get(col)
-            v2 = self._normalize_currency_units(candidate.get(col)) if any(k in col for k in ["Revenue", "PAT", "EBITDA"]) else candidate.get(col)
-            s = self._feature_similarity(v1, v2, tolerance_ratio=1.8)
+        # 100% Percentage-based Profit Comparison:
+        # Net_Profit_Margin_Pct: (PAT / Revenue) * 100
+        # Operating_Margin_Pct: (EBITDA / Revenue) * 100
+        # Revenue_Growth_YoY_Pct: Year-over-Year revenue expansion %
+        # Is_Profitable: Binary 1.0 vs 0.0 match
+        for col in ["Net_Profit_Margin_Pct", "Operating_Margin_Pct", "Revenue_Growth_YoY_Pct"]:
+            val_t = target.get(col)
+            val_c = candidate.get(col)
+            # If Net_Profit_Margin_Pct is missing in target, compute directly from PAT and Revenue if present
+            if val_t is None and col == "Net_Profit_Margin_Pct":
+                pat = target.get("PAT_Norm") or target.get("PAT")
+                rev = target.get("Revenue_Current_Norm") or target.get("revenue")
+                if pat is not None and rev and float(rev) > 0:
+                    val_t = (float(pat) / float(rev)) * 100.0
+
+            s = self._feature_similarity(val_t, val_c, tolerance_ratio=1.5)
             if s is not None:
                 prof_scores.append(s)
+
+        # Is Profitable match
+        t_prof = target.get("Is_Profitable")
+        c_prof = candidate.get("Is_Profitable")
+        if pd.notna(t_prof) and pd.notna(c_prof):
+            prof_scores.append(1.0 if int(float(t_prof)) == int(float(c_prof)) else 0.0)
 
         debt_scores = []
         for col in ["Debt_to_Equity_Ratio", "Total_Borrowings_Norm", "Total_Book_Value", "BVPS"]:
@@ -154,7 +172,18 @@ class GMPSimilarityEngine:
         target_sec = str(target_ipo.get("sector") or "").lower().strip()
 
         candidate_matches: list[tuple[float, pd.Series, bool, bool]] = []
+        target_is_profitable = target_ipo.get("Is_Profitable")
+        if target_is_profitable is None and (target_ipo.get("Net_Profit_Margin_Pct") is not None):
+            target_is_profitable = 1 if float(target_ipo["Net_Profit_Margin_Pct"]) > 0 else 0
+
         for _, row in self.history_df.iterrows():
+            # Hard Safety Filter: Profitable companies must only match profitable peers;
+            # Loss-making companies must only match loss-making peers.
+            cand_is_profitable = row.get("Is_Profitable")
+            if target_is_profitable is not None and pd.notna(cand_is_profitable):
+                if int(float(target_is_profitable)) != int(float(cand_is_profitable)):
+                    continue
+
             sim = self.compute_similarity(target_ipo, row)
             r_ind = str(row.get("industry") or "").lower().strip()
             r_sec = str(row.get("sector") or "").lower().strip()
