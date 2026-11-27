@@ -101,50 +101,72 @@ def determine_is_sme(
     explicit_is_sme: Optional[bool] = None,
 ) -> bool:
     """
-    Accurately detects whether an IPO is SME or Mainboard using multiple institutional rules:
-    1. Explicit boolean flag if provided.
-    2. Exchange / Platform tags ('BSE SME', 'NSE Emerge', 'Emerge', 'SME').
-    3. Issue Type strings ('SME', 'BSE SME', 'SME IPO', 'Book Building (SME)', 'Fixed Price (SME)').
-    4. Company Name / Symbol tags ('SME', 'EMERGE', '-SM', '-ST').
-    5. Lot Size heuristic: SEBI mandates SME minimum application of ₹1.0-1.2 Lakh,
-       meaning lot sizes are almost universally >= 500 - 4000 shares (Mainboard is 15-100 shares).
-    6. Issue size: SEBI post-issue capital limit for SME is ₹25 Cr. If issue_size > ₹250 Cr, it is Mainboard.
+    Accurately detects whether an IPO is SME or Mainboard using regulatory rules:
+    TRUSTED INSTITUTIONAL RULES (from SEBI, BSE, NSE, and Chittorgarh):
+    1. DUAL LISTING RULE (Absolute):
+       - If listed on both BSE and NSE ('BSE, NSE' or 'BSE & NSE'), it is ALWAYS MAINBOARD.
+       - SME IPOs are legally restricted to a single SME platform (either BSE SME or NSE Emerge).
+    2. SEBI ISSUE SIZE CEILING:
+       - Under SEBI ICDR regulations Chapter IX, SME post-issue capital cannot exceed ₹25 Cr.
+       - Any issue size >= ₹100.0 Cr is ALWAYS MAINBOARD.
+    3. LOT SIZE / APPLICATION TICKET RULE:
+       - Mainboard retail application is ~₹14,000–₹15,000 (Lot size <= 250 shares).
+       - SME retail minimum application is mandated by SEBI to be ₹1.0 - 1.2 Lakh (Lot size >= 500 shares).
+    4. PLATFORM EXPLICIT KEYWORDS:
+       - If exchange/platform is 'BSE SME', 'NSE Emerge', 'NSE SME', 'SME IPO', 'EMERGE' -> SME.
+       - If 'Mainboard', 'BSE', 'NSE' (without SME/Emerge) -> Mainboard.
+    5. COMPANY / SYMBOL CONVENTIONS:
+       - Symbol ending in -SM, -ST, .SME -> SME.
     """
-    if explicit_is_sme is True:
-        return True
-
     name_upper = (canonical_name or "").upper()
     sym_upper = (symbol or "").upper()
     type_upper = (issue_type or "").upper()
     seg_upper = (segment or "").upper()
     exch_upper = (exchange or "").upper()
-
-    # Check text indicators in name, symbol, type, segment, or exchange
     text_blob = f"{name_upper} {sym_upper} {type_upper} {seg_upper} {exch_upper}"
-    sme_keywords = ["SME", "EMERGE", "NSE EMERGE", "BSE SME", "SME IPO", "SME ISSUE", "BSESME", "NSEEMERGE"]
-    for kw in sme_keywords:
-        if kw in text_blob:
-            return True
 
-    if sym_upper.endswith("-SM") or sym_upper.endswith("-ST") or sym_upper.endswith(".SME"):
-        return True
+    # RULE 1: Dual listing on BSE & NSE -> ALWAYS Mainboard (SME cannot dual list per SEBI rules)
+    if ("BSE" in exch_upper and "NSE" in exch_upper) or "BSE, NSE" in text_blob or "BSE & NSE" in text_blob:
+        return False
 
-    # Lot size rule: SEBI minimum application value ₹1.0 - 1.2 Lakh means lot size >= 500
-    if lot_size is not None:
-        try:
-            if float(lot_size) >= 500:
-                return True
-        except (ValueError, TypeError):
-            pass
+    # RULE 2: Explicit 'MAINBOARD' tag -> ALWAYS Mainboard
+    if "MAINBOARD" in text_blob:
+        return False
 
-    # Issue size hard filter: definitely Mainboard if > 250 Cr
+    # RULE 3: Issue size >= 100 Cr -> ALWAYS Mainboard (SEBI post-issue cap restricts SME)
     if issue_size_cr is not None:
         try:
-            if float(issue_size_cr) > 250.0:
+            if float(issue_size_cr) >= 100.0:
                 return False
         except (ValueError, TypeError):
             pass
 
+    # RULE 4: Retail Lot size <= 250 shares -> ALWAYS Mainboard (SME lot is 500 - 4000 shares)
+    if lot_size is not None:
+        try:
+            ls = float(lot_size)
+            if 0 < ls <= 250:
+                return False
+            elif ls >= 500:
+                return True
+        except (ValueError, TypeError):
+            pass
+
+    # RULE 5: Explicit SME Platform keywords
+    sme_keywords = ["BSE SME", "NSE EMERGE", "NSE SME", "BSESME", "NSEEMERGE", "EMERGE", "SME IPO", "SME ISSUE", " (SME)", "[SME]"]
+    for kw in sme_keywords:
+        if kw in text_blob:
+            return True
+
+    # RULE 6: Symbol naming conventions (-SM, -ST, .SME)
+    if sym_upper.endswith("-SM") or sym_upper.endswith("-ST") or sym_upper.endswith(".SME"):
+        return True
+
+    # RULE 7: If exchange is purely 'BSE' or 'NSE' (without SME/Emerge) and size >= 50 Cr -> Mainboard
+    if exch_upper in ["BSE", "NSE", "BSE/NSE", "NSE/BSE"]:
+        return False
+
+    # Fallback to explicit flag if provided
     if explicit_is_sme is not None:
         return bool(explicit_is_sme)
 

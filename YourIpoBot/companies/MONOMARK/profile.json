@@ -1,0 +1,16 @@
+{
+  "ipo_id": "monomark_2026",
+  "canonical_name": "Monomark Engineering (India) Limited",
+  "symbol": "MONOMARK",
+  "is_sme": false,
+  "is_mainboard": true,
+  "issue_open": "2026-12-02",
+  "issue_close": "2026-12-04",
+  "price_band": [
+    60.0,
+    65.0
+  ],
+  "issue_size_cr": 175.5,
+  "lot_size": 225,
+  "exchange": "BSE, NSE"
+}

@@ -63,8 +63,14 @@ class YourIpoBotPipeline:
         self._recompute_all_active_gmps(stage="DAY3_PRE_CUTOFF")
 
     def job_evening_ipo_detector(self) -> None:
-        """Runs at 06:30 PM: Scrapes BSE/NSE for newly approved IPOs."""
-        logger.info("[06:30 PM JOB] Scanning BSE and NSE portals for newly listed public issues...")
+        """Runs at 06:30 PM: Scrapes trusted primary market feeds for newly approved IPOs."""
+        logger.info("[06:30 PM JOB] Scanning trusted primary market feeds (InvestorGain/Chittorgarh) for newly announced IPOs...")
+        try:
+            from YourIpoBot.core.trusted_scraper import sync_trusted_ipos_to_queue
+            synced = sync_trusted_ipos_to_queue()
+            logger.info("Synced %d verified IPOs from trusted primary market.", synced)
+        except Exception as exc:
+            logger.warning("Could not sync trusted primary market feed: %s", exc)
         self._detect_new_ipos_from_exchanges()
 
     def job_day_end_reconciliation(self) -> None:
