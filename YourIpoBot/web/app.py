@@ -41,7 +41,11 @@ def index():
     # Read latest prediction for each IPO from their company folders
     ipos_list = []
     for r in active_ipos:
-        comp_dir = Path(r[10])
+        comp_dir_str = r[10]
+        comp_folder_name = Path(comp_dir_str).name
+        comp_dir = config.COMPANIES_DIR / comp_folder_name
+        if not comp_dir.exists():
+            comp_dir = Path(comp_dir_str)
         pred_file = comp_dir / "prediction.json"
         pred_data = {}
         if pred_file.exists():

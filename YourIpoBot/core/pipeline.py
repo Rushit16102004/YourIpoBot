@@ -121,7 +121,12 @@ class YourIpoBotPipeline:
             return
 
         cname, comp_dir_str, is_sme, price_max, size_cr = row
-        comp_dir = Path(comp_dir_str)
+        # Resolve company_dir dynamically relative to config.COMPANIES_DIR
+        comp_folder_name = Path(comp_dir_str).name
+        comp_dir = config.COMPANIES_DIR / comp_folder_name
+        if not comp_dir.exists():
+            comp_dir = Path(comp_dir_str)
+        comp_dir.mkdir(parents=True, exist_ok=True)
         metrics_file = comp_dir / "metrics.json"
 
         target_data: dict[str, Any] = {
